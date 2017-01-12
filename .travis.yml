@@ -20,3 +20,4 @@ licenses:
     - 'android-sdk-preview-license-.+'
     - 'android-sdk-license-.+'
     - 'google-gdk-license-.+'
+    - echo y | android update sdk --filter platform-tools,build-tools-19.1.0,android-19,extra-android-support,$ANDROID_SDKS --no-ui --force > /dev/null
