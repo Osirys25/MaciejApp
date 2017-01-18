@@ -20,4 +20,4 @@ licenses:
     - 'android-sdk-preview-license-.+'
     - 'android-sdk-license-.+'
     - 'google-gdk-license-.+'
-    - android update sdk --no-ui --filter build-tools-19.1.0,android-19,platform-tools,tools,extra-android-m2repository
+    - android update sdk --no-ui --filter build-tools-19.1.0,android-19,platform-tools,tools,extra-android-m2repository,extra-google-m2repository
