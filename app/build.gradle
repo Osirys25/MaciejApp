@@ -39,15 +39,4 @@ dependencies {
     androidTestCompile 'com.android.support.test:rules:0.5'
     androidTestCompile 'com.android.support:appcompat-v7:25.1.0'
     androidTestCompile 'com.android.support:support-v4:25.1.0'
-    
-    // Espresso core
-    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
-    // Espresso-contrib for DatePicker, RecyclerView, Drawer actions, Accessibility checks, CountingIdlingResource
-    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2.2'
-    // Espresso-web for WebView support
-    androidTestCompile 'com.android.support.test.espresso:espresso-web:2.2.2'
-    // Espresso-idling-resource for synchronization with background jobs
-    androidTestCompile 'com.android.support.test.espresso:espresso-idling-resource:2.2.2'
-    // Espresso-intents for validation and stubbing of Intents
-    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
 }
