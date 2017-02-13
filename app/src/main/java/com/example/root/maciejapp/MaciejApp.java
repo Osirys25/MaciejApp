@@ -11,3 +11,6 @@ public class MaciejApp extends AppCompatActivity {
         setContentView(R.layout.activity_maciej_app);
     }
 }
+
+// Klepa tu byl
+//i znowu na tym samym branchu
