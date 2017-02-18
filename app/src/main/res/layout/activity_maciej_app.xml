@@ -11,11 +11,12 @@
     tools:context="com.example.root.maciejapp.MaciejApp">
 
     <Button
-        android:text="Button"
+        android:text="Ogłoszenia"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="46dp"
         android:id="@+id/Click"
+        android:onClick="openPublications"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>
