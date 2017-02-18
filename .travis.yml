@@ -32,3 +32,12 @@ before_script:
   - emulator -avd test -no-skin -no-audio -no-window &
   - adb wait-for-device
   - adb shell input keyevent 82 &
+
+deploy:
+  - provider: releases
+    skip_cleanup: true
+    api_key: "daed2a2b78ac597629277ac54bfbb7417f947a81"
+    file: "app/build/outputs/apk/app-release.apk"
+    on:
+      repo: Osirys25/MaciejApp
+      tags: true  
