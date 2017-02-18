@@ -35,12 +35,13 @@ before_script:
 
 before_deploy:
   - cp ./app/build/outputs/apk/*.apk .
+  - ls ./app/build/outputs/apk/
 
 deploy:
   - provider: releases
     skip_cleanup: true
     api_key: "daed2a2b78ac597629277ac54bfbb7417f947a81"
-    file: "*.apk"
+    file: "apk-release.apk"
     on:
       repo: Osirys25/MaciejApp
       tags: true  
