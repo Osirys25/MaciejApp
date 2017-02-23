@@ -1,11 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools" android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+
+
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:orientation="vertical">
+
+<LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.1"
+>
+
+
 
     <WebView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/webView">
+    </WebView>
+
+
+
+</LinearLayout>
+
+<LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="100px"
+        android:weightSum="1"
+        android:id="@+id/buttonLayout">
+
+    <Button
+            android:text="Odśwież"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/webView"/>
+            android:layout_height="fill_parent"
+            android:onClick="refresh"
+            android:id="@+id/refreshButton"/>
+
+</LinearLayout>
 </LinearLayout>
