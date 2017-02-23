@@ -18,12 +18,11 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".Publications"
-                android:label="Ogłoszenia"
+                android:name=".SinglePublication"
                 android:theme="@style/AppTheme">
         </activity>
         <activity
-                android:name=".SinglePublication"
+                android:name=".ArchivalPublicationsList"
                 android:theme="@style/AppTheme">
         </activity>
     </application>
