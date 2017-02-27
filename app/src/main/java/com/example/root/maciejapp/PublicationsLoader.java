@@ -105,18 +105,21 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
            try{ out_of_date_title = pubsDataArray[0][0]; }
            catch(Exception e) {e.printStackTrace();}
 
-           publicationsNumber = archivalPublications.getInt("count")+1; // +1 means current publication
-           pubsDataArray = new String[publicationsNumber][];
+           int tempPublicationsNumber = archivalPublications.getInt("count")+1; // +1 means current publication
+           String[][] tempPubsDataArray = new String[tempPublicationsNumber][];
 
-           pubsDataArray[0] = new String[2]; //2 because will contain title and content Strings
-           pubsDataArray[0][0] = currentPublication.getJSONArray("posts").getJSONObject(0).getString("title");
-           pubsDataArray[0][1] = currentPublication.getJSONArray("posts").getJSONObject(0).getString("content");
+           tempPubsDataArray[0] = new String[2]; //2 because will contain title and content Strings
+           tempPubsDataArray[0][0] = currentPublication.getJSONArray("posts").getJSONObject(0).getString("title");
+           tempPubsDataArray[0][1] = currentPublication.getJSONArray("posts").getJSONObject(0).getString("content");
 
            for(int ii=1; ii<publicationsNumber; ii++){
-               pubsDataArray[ii]=new String[2]; //2 because will contain title and content Strings
-               pubsDataArray[ii][0] = archivalPublications.getJSONArray("posts").getJSONObject(ii-1).getString("title");
-               pubsDataArray[ii][1] = archivalPublications.getJSONArray("posts").getJSONObject(ii-1).getString("content");
+               tempPubsDataArray[ii]=new String[2]; //2 because will contain title and content Strings
+               tempPubsDataArray[ii][0] = archivalPublications.getJSONArray("posts").getJSONObject(ii-1).getString("title");
+               tempPubsDataArray[ii][1] = archivalPublications.getJSONArray("posts").getJSONObject(ii-1).getString("content");
            }
+
+           publicationsNumber = tempPublicationsNumber;
+           pubsDataArray = tempPubsDataArray;
 
        }
        catch(Exception e){
