@@ -21,6 +21,7 @@ import static android.content.Context.MODE_PRIVATE;
  */
 public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.PublicationsStatus> {
 
+
     private static final String currentURL="http://www.maciejowka.org/klepson/get_category_posts/?slug=ogloszenia-duszpasterskie";
     private static final String archivalURL="http://www.maciejowka.org/klepson/get_category_posts/?slug=archiwum";
     private static int publicationsNumber;
@@ -102,20 +103,40 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
         String out_of_date_title = ""; //used to check if there is a new publication
 
        try{
+
            try{ out_of_date_title = pubsDataArray[0][0]; }
            catch(Exception e) {e.printStackTrace();}
 
-           int tempPublicationsNumber = archivalPublications.getInt("count")+1; // +1 means current publication
-           String[][] tempPubsDataArray = new String[tempPublicationsNumber][];
+           int tempPublicationsNumber;
+           String[][] tempPubsDataArray;
 
-           tempPubsDataArray[0] = new String[2]; //2 because will contain title and content Strings
-           tempPubsDataArray[0][0] = currentPublication.getJSONArray("posts").getJSONObject(0).getString("title");
-           tempPubsDataArray[0][1] = currentPublication.getJSONArray("posts").getJSONObject(0).getString("content");
+           if(currentPublication.getInt("count")>0){
 
-           for(int ii=1; ii<publicationsNumber; ii++){
-               tempPubsDataArray[ii]=new String[2]; //2 because will contain title and content Strings
-               tempPubsDataArray[ii][0] = archivalPublications.getJSONArray("posts").getJSONObject(ii-1).getString("title");
-               tempPubsDataArray[ii][1] = archivalPublications.getJSONArray("posts").getJSONObject(ii-1).getString("content");
+               tempPublicationsNumber = archivalPublications.getInt("count")+1; // +1 means current publication
+               tempPubsDataArray = new String[tempPublicationsNumber][];
+
+               tempPubsDataArray[0] = new String[2]; //2 because will contain title and content Strings
+               tempPubsDataArray[0][0] = currentPublication.getJSONArray("posts").getJSONObject(0).getString("title");
+               tempPubsDataArray[0][1] = currentPublication.getJSONArray("posts").getJSONObject(0).getString("content");
+
+               for(int ii=1; ii<tempPublicationsNumber; ii++){
+                   tempPubsDataArray[ii]=new String[2]; //2 because will contain title and content Strings
+                   tempPubsDataArray[ii][0] = archivalPublications.getJSONArray("posts").getJSONObject(ii-1).getString("title");
+                   tempPubsDataArray[ii][1] = archivalPublications.getJSONArray("posts").getJSONObject(ii-1).getString("content");
+               }
+
+           }
+           else{ //missing current publication situation
+
+               tempPublicationsNumber = archivalPublications.getInt("count");
+               tempPubsDataArray = new String[tempPublicationsNumber][];
+
+               for(int ii=0; ii<tempPublicationsNumber; ii++){
+                   tempPubsDataArray[ii]=new String[2]; //2 because will contain title and content Strings
+                   tempPubsDataArray[ii][0] = archivalPublications.getJSONArray("posts").getJSONObject(ii).getString("title");
+                   tempPubsDataArray[ii][1] = archivalPublications.getJSONArray("posts").getJSONObject(ii).getString("content");
+               }
+
            }
 
            publicationsNumber = tempPublicationsNumber;
