@@ -57,3 +57,6 @@ public class MaciejApp extends AppCompatActivity {
 
 
 }
+
+// Klepa tu byl
+//i znowu na tym samym branchu
