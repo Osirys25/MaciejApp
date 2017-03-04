@@ -1,10 +1,9 @@
-package com.example.root.maciejapp;
+package org.maciejowka.maciejapp;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.Toast;
 import org.json.JSONObject;
 
@@ -19,6 +18,7 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * Created by maciej on 17.02.17.
  */
+
 public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.PublicationsStatus> {
 
 

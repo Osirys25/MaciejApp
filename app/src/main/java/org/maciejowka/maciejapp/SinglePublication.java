@@ -1,8 +1,7 @@
-package com.example.root.maciejapp;
+package org.maciejowka.maciejapp;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
@@ -11,6 +10,7 @@ import android.widget.LinearLayout;
 /**
  * Created by maciej on 17.02.17.
  */
+
 public class SinglePublication extends AppCompatActivity {
 
     private WebView webView;
