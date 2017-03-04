@@ -1,4 +1,4 @@
-package com.example.root.maciejapp;
+package org.maciejowka.maciejapp;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import java.util.ArrayList;
 /**
  * Created by maciej on 19.02.17.
  */
+
 public class ArchivalPublicationsList extends AppCompatActivity{
     private ListView listView;
     private ArrayList<String> listItems=new ArrayList<>();

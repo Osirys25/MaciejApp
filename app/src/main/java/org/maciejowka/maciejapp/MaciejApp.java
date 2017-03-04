@@ -1,4 +1,4 @@
-package com.example.root.maciejapp;
+package org.maciejowka.maciejapp;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;

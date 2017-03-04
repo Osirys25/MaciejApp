@@ -1,4 +1,4 @@
-package com.example.root.maciejapp;
+package org.maciejowka.maciejapp;
 
 import org.junit.Test;
 
