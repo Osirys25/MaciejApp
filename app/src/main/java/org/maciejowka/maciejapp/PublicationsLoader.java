@@ -34,14 +34,17 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
     public static ArrayList<Activity> activitiesToUpDate=new ArrayList<>();
 
     private enum DownloadingStatus {
-        UPDATED, UP_TO_DATE, FAILURE
+        NEW, UP_TO_DATE, FAILURE, MODIFIED
     }
 
     public enum PublicationsStatus {
         //RS - restored successfully, RF - restoring failed,
-        // DS_US - downloaded successfully and updated, DS_UF - downloaded successfully but not updated, DF - downloading failed
+        // DS_NS - downloaded successfully with new publications
+        // DF - downloading failed
+        // DS_MS - downloaded successfully, without new publications, but with modifications
+        // DS_MF - downloaded successfully, but without any changes
 
-        PENDING, RS, RF, RS_DS_US, RS_DS_UF, RS_DF, RF_DS_US, RF_DS_UF, RF_DF
+        PENDING, RS, RF, RS_DS_NS, RS_DS_MF, RS_DS_MS, RS_DF, RF_DS_NS, RF_DS_MS, RF_DS_MF, RF_DF
     }
 
     public static PublicationsStatus loadPublications(){
@@ -54,16 +57,21 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
                 break;
             }
             case RS: //go down
-            case RS_DS_US: //go down
-            case RS_DS_UF: //go down
+            case RS_DS_NS: //go down
+            case RS_DS_MF: //go down
+            case RS_DS_MS: //go down
             case RS_DF:{
                 switch(downloadPubsToDataArray()){
                     case UP_TO_DATE:{
-                        returnStatement = PublicationsStatus.RS_DS_UF;
+                        returnStatement = PublicationsStatus.RS_DS_MF;
                         break;
                     }
-                    case UPDATED:{
-                        returnStatement = PublicationsStatus.RS_DS_US;
+                    case NEW:{
+                        returnStatement = PublicationsStatus.RS_DS_NS;
+                        break;
+                    }
+                    case MODIFIED:{
+                        returnStatement = PublicationsStatus.RS_DS_MS;
                         break;
                     }
                     case FAILURE:{
@@ -74,16 +82,21 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
                 break;
             }
             case RF: //go down
-            case RF_DS_US: //go down
-            case RF_DS_UF: //go down
+            case RF_DS_NS: //go down
+            case RF_DS_MF: //go down
+            case RF_DS_MS: //go down
             case RF_DF:{
                 switch(downloadPubsToDataArray()){
                     case UP_TO_DATE:{
-                        returnStatement = PublicationsStatus.RF_DS_UF;
+                        returnStatement = PublicationsStatus.RF_DS_MF;
                         break;
                     }
-                    case UPDATED:{
-                        returnStatement = PublicationsStatus.RF_DS_US;
+                    case NEW:{
+                        returnStatement = PublicationsStatus.RF_DS_NS;
+                        break;
+                    }
+                    case MODIFIED:{
+                        returnStatement = PublicationsStatus.RF_DS_MS;
                         break;
                     }
                     case FAILURE:{
@@ -100,43 +113,58 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
 
     public static DownloadingStatus JSONObjectsToDataArray(){
 
-        String out_of_date_title = ""; //used to check if there is a new publication
+        boolean pubsModified=false;
+        boolean newPubs=false;
+        DownloadingStatus returnDownloadingStatus;
+        int iterPubStartIndex;
 
        try{
 
-           try{ out_of_date_title = pubsDataArray[0][0]; }
-           catch(Exception e) {e.printStackTrace();}
-
            int tempPublicationsNumber;
            String[][] tempPubsDataArray;
+           iterPubStartIndex = 1;
 
            if(currentPublication.getInt("count")>0){
+
+               try { //check for new publications titles
+                   if (!currentPublication.getJSONArray("posts").getJSONObject(0).getString("title").equals(pubsDataArray[0][0]))
+                       newPubs = true;
+               }
+               catch(Exception e){
+                   e.printStackTrace();
+                   newPubs=true;
+               }
 
                tempPublicationsNumber = archivalPublications.getInt("count")+1; // +1 means current publication
                tempPubsDataArray = new String[tempPublicationsNumber][];
 
-               tempPubsDataArray[0] = new String[2]; //2 because will contain title and content Strings
+               tempPubsDataArray[0] = new String[3]; //3 because will contain title and content and modified Strings
                tempPubsDataArray[0][0] = currentPublication.getJSONArray("posts").getJSONObject(0).getString("title");
                tempPubsDataArray[0][1] = currentPublication.getJSONArray("posts").getJSONObject(0).getString("content");
-
-               for(int ii=1; ii<tempPublicationsNumber; ii++){
-                   tempPubsDataArray[ii]=new String[2]; //2 because will contain title and content Strings
-                   tempPubsDataArray[ii][0] = archivalPublications.getJSONArray("posts").getJSONObject(ii-1).getString("title");
-                   tempPubsDataArray[ii][1] = archivalPublications.getJSONArray("posts").getJSONObject(ii-1).getString("content");
+               tempPubsDataArray[0][2] = currentPublication.getJSONArray("posts").getJSONObject(0).getString("modified");
+               try {
+                   if (!tempPubsDataArray[0][2].equals(pubsDataArray[0][2])) pubsModified = true;
                }
+               catch(Exception e){e.printStackTrace(); pubsModified = true;}
 
            }
            else{ //missing current publication situation
 
                tempPublicationsNumber = archivalPublications.getInt("count");
                tempPubsDataArray = new String[tempPublicationsNumber][];
+               iterPubStartIndex = 0;
 
-               for(int ii=0; ii<tempPublicationsNumber; ii++){
-                   tempPubsDataArray[ii]=new String[2]; //2 because will contain title and content Strings
-                   tempPubsDataArray[ii][0] = archivalPublications.getJSONArray("posts").getJSONObject(ii).getString("title");
-                   tempPubsDataArray[ii][1] = archivalPublications.getJSONArray("posts").getJSONObject(ii).getString("content");
+           }
+
+           for(int ii=iterPubStartIndex; ii<tempPublicationsNumber; ii++){
+               tempPubsDataArray[ii]=new String[3]; //3 because will contain title and content and modified Strings
+               tempPubsDataArray[ii][0] = archivalPublications.getJSONArray("posts").getJSONObject(ii-iterPubStartIndex).getString("title");
+               tempPubsDataArray[ii][1] = archivalPublications.getJSONArray("posts").getJSONObject(ii-iterPubStartIndex).getString("content");
+               tempPubsDataArray[ii][2] = archivalPublications.getJSONArray("posts").getJSONObject(ii-iterPubStartIndex).getString("modified");
+               try {
+                   if (!pubsModified && !tempPubsDataArray[ii][2].equals(pubsDataArray[ii][2])) pubsModified = true;
                }
-
+               catch(Exception e){e.printStackTrace(); pubsModified = true;}
            }
 
            publicationsNumber = tempPublicationsNumber;
@@ -148,7 +176,11 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
            return DownloadingStatus.FAILURE;
        }
 
-       return out_of_date_title.equals(pubsDataArray[0][0])?DownloadingStatus.UP_TO_DATE:DownloadingStatus.UPDATED;
+       if(newPubs) returnDownloadingStatus = DownloadingStatus.NEW;
+       else if(pubsModified) returnDownloadingStatus = DownloadingStatus.MODIFIED;
+       else returnDownloadingStatus = DownloadingStatus.UP_TO_DATE;
+
+       return returnDownloadingStatus;
     }
 
     private static DownloadingStatus downloadPubsToDataArray(){
@@ -197,11 +229,11 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
     private static void savePubsDataArray(){
         SharedPreferences sharedPref = maciejAppActivityContext.getSharedPreferences(SHARED_PREFERENCES_NAME, maciejAppActivityContext.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        //editor.putInt(getString(R.string.saved_high_score), newHighScore);
         editor.putInt("publicationsNumber",publicationsNumber);
         for (int i = 0; i < publicationsNumber; i++){
             editor.putString("title"+i,pubsDataArray[i][0]);
             editor.putString("content"+i,pubsDataArray[i][1]);
+            editor.putString("modified"+i,pubsDataArray[i][2]);
         }
         editor.apply();
 
@@ -214,11 +246,11 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
         pubsDataArray = new String[publicationsNumber][];
         if(publicationsNumber>0) {
             for (int i = 0; i < publicationsNumber&&success; i++){
-                pubsDataArray[i] = new String[2];
+                pubsDataArray[i] = new String[3];
                 pubsDataArray[i][0] = prefs.getString("title"+i,"missing title");
-                success = pubsDataArray[i][0] != "missing title";
                 pubsDataArray[i][1] = prefs.getString("content"+i,"missing content");
-                success = pubsDataArray[i][1] != "missing content";
+                pubsDataArray[i][2] = prefs.getString("modified"+i,"missing modified");
+                success = pubsDataArray[i][0] != "missing title" && pubsDataArray[i][1] != "missing content" && pubsDataArray[i][2] != "missing modified";
             }
         }
         else{
@@ -259,9 +291,15 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
                 new PublicationsLoader().execute();
                 break;
             }
-            case RS_DS_US:{} //go down
-            case RF_DS_US:{
+            case RS_DS_NS:{} //go down
+            case RF_DS_NS:{
                 Toast.makeText(maciejAppActivityContext, "Nowe ogłoszenia!", Toast.LENGTH_SHORT).show();
+                savePubsDataArray();
+                break;
+            }
+            case RS_DS_MS:{} //go down
+            case RF_DS_MS:{
+                Toast.makeText(maciejAppActivityContext, "Zmiany w ogłoszeniach", Toast.LENGTH_SHORT).show();
                 savePubsDataArray();
                 break;
             }
@@ -280,6 +318,10 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
             }
         }//for
 
+    }
+
+    public static void executeSelf(){
+        new PublicationsLoader().executeOnExecutor(SERIAL_EXECUTOR);
     }
 
 
