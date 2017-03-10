@@ -34,10 +34,12 @@ public class SinglePublication extends AppCompatActivity {
         publicationDataArray = new String[2];
 
         switch(PublicationsLoader.publicationsStatus){
-            case RS_DS_US: //go down
-            case RF_DS_US: //go down
-            case RF_DS_UF: //go down
-            case RS_DS_UF: //go down
+            case RS_DS_NS: //go down
+            case RF_DS_NS: //go down
+            case RF_DS_MF: //go down
+            case RS_DS_MF: //go down
+            case RS_DS_MS: //go down
+            case RF_DS_MS: //go down
             case RS_DF: //go down
             case RS:{
                 int position = getIntent().getIntExtra("position", 0);
@@ -95,7 +97,7 @@ public class SinglePublication extends AppCompatActivity {
     }
 
     public void refresh(View view){
-            new PublicationsLoader().execute();
+            PublicationsLoader.executeSelf();
     }
 
 
