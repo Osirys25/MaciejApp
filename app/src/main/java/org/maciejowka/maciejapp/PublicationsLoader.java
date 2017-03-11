@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.widget.Toast;
 import org.json.JSONObject;
-
+import android.util.Log;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -170,6 +170,7 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
            publicationsNumber = tempPublicationsNumber;
            pubsDataArray = tempPubsDataArray;
 
+           pubsDataArray = PublicationHTML.addMetadata(pubsDataArray);      //dodanie metadanych do obsługi CSS
        }
        catch(Exception e){
            e.printStackTrace();
@@ -203,7 +204,6 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
         }
 
         return true;
-
     }
 
 
@@ -230,13 +230,24 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
         SharedPreferences sharedPref = maciejAppActivityContext.getSharedPreferences(SHARED_PREFERENCES_NAME, maciejAppActivityContext.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt("publicationsNumber",publicationsNumber);
+
+        for(int i = 0; i < publicationsNumber; i++) {
+
+            if(!PublicationHTML.findMetadata(pubsDataArray[i][1]))
+                pubsDataArray[i][1] = PublicationHTML.addMetadata(pubsDataArray[i][1]);             //dodanie metadanych do obsługi CSS (jeśli nie zostały dodane wcześniej)
+
+            else
+                if(!PublicationHTML.verifyStylesheet(pubsDataArray[i][1]))
+                    pubsDataArray[i][1] = PublicationHTML.replaceStylesheet(pubsDataArray[i][1]);   //podmiana arkuszu CSS
+        }
+
         for (int i = 0; i < publicationsNumber; i++){
             editor.putString("title"+i,pubsDataArray[i][0]);
             editor.putString("content"+i,pubsDataArray[i][1]);
             editor.putString("modified"+i,pubsDataArray[i][2]);
         }
-        editor.apply();
 
+        editor.apply();
     }
 
     private static boolean restorePubsDataArray(){
@@ -252,9 +263,10 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
                 pubsDataArray[i][2] = prefs.getString("modified"+i,"missing modified");
                 success = pubsDataArray[i][0] != "missing title" && pubsDataArray[i][1] != "missing content" && pubsDataArray[i][2] != "missing modified";
             }
+
         }
-        else{
-            success=false;
+        else {
+            success = false;
         }
 
         return success;
@@ -324,15 +336,51 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
         new PublicationsLoader().executeOnExecutor(SERIAL_EXECUTOR);
     }
 
+    //PublicationHTML - dodawanie informacji potrzebnych do obsługi arkuszy CSS
 
+    private static class PublicationHTML {
 
+        static final String HTML_METADATA_0 = "<!DOCTYPE html><html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"";
+        static final String HTML_METADATA_1 = "\"></head><body>";
+        static final String HTML_METADATA_2 = "</body></html>";
+        static final String STYLESHEET = "publication/style.css";
 
+        static String addMetadata(String publication) {
 
+            return new StringBuilder().insert(0, publication).insert(0, HTML_METADATA_1).insert(0, STYLESHEET).insert(0, HTML_METADATA_0).append(HTML_METADATA_2).toString();
+        }
 
+        static String [][] addMetadata(String [][] publications) {
 
+            for(int i = 0; i < publicationsNumber; i++) {
 
+                publications[i][1] = addMetadata(publications[i][1]);
+            }
 
+            return publications;
+        }
 
+        static boolean findMetadata(String publication) {
 
+            return (publication.contains("<!DOCTYPE html>"));
+        }
+
+        static String getStylesheet(String publication) {
+
+            return new StringBuilder().append(publication.substring(publication.indexOf("href=\"") + 6, publication.indexOf("\"", publication.indexOf("href=\"") + 6))).toString();
+        }
+
+        static boolean verifyStylesheet(String publication) {
+
+            return getStylesheet(publication).equals(STYLESHEET);
+        }
+
+        static String replaceStylesheet(String publication) {
+
+            int index = publication.indexOf(getStylesheet(publication));
+            int length = getStylesheet(publication).length();
+
+            return new StringBuilder(publication).delete(index, index + length).insert(index, STYLESHEET).toString();
+        }
+    }
 }
-

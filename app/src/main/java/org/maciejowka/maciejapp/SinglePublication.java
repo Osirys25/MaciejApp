@@ -72,7 +72,7 @@ public class SinglePublication extends AppCompatActivity {
     private void loadWebView(){
 
         webView = (WebView)findViewById(R.id.webView);
-        webView.loadData(publicationDataArray[1], "text/html; charset=utf-8", "UTF-8");
+        webView.loadDataWithBaseURL("file:///android_asset/", publicationDataArray[1], "text/html; charset=utf-8", "UTF-8", null); //webView.loadData nie obsługuje arkuszy CSS
 
     }//loadWebView()
 
