@@ -6,6 +6,7 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.util.Log;
 
 /**
  * Created by maciej on 17.02.17.
@@ -56,6 +57,18 @@ public class SinglePublication extends AppCompatActivity {
                     publicationDataArray[0] = PublicationsLoader.getPubsDataArray()[position][0];
                     publicationDataArray[1] = PublicationsLoader.getPubsDataArray()[position][1];
                 }
+
+                //CSS metadata
+
+                if(!PublicationHTML.findMetadata(publicationDataArray[1]))
+                    publicationDataArray[1] = PublicationHTML.addMetadata(publicationDataArray[1]);     //dodanie metadanych do obsługi CSS (jeśli nie zostały dodane wcześniej)
+
+                else
+                    if(!PublicationHTML.findStylesheet(publicationDataArray[1]))
+                        publicationDataArray[1] = PublicationHTML.replaceStylesheet(publicationDataArray[1]);   //podmiana arkuszu CSS
+
+                //Log.d("CSS check: ", publicationDataArray[1]);
+
                 break;
             }
             case RF_DF:{
@@ -72,7 +85,7 @@ public class SinglePublication extends AppCompatActivity {
     private void loadWebView(){
 
         webView = (WebView)findViewById(R.id.webView);
-        webView.loadData(publicationDataArray[1], "text/html; charset=utf-8", "UTF-8");
+        webView.loadDataWithBaseURL("file:///android_asset/", publicationDataArray[1], "text/html; charset=utf-8", "UTF-8", null); //webView.loadData nie obsługuje arkuszy CSS
 
     }//loadWebView()
 
@@ -100,7 +113,41 @@ public class SinglePublication extends AppCompatActivity {
             PublicationsLoader.executeSelf();
     }
 
+    //PublicationHTML - do obsługi CSS
 
+    private static class PublicationHTML {
 
+        static final String HTML_METADATA_0 = "<!DOCTYPE html><html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"";
+        static final String HTML_METADATA_1 = "\"></head><body>";
+        static final String HTML_METADATA_2 = "</body></html>";
+        static final String STYLESHEET = "publication/style.css";
 
-}//class
+        static String addMetadata(String publication) {
+
+            return new StringBuilder().insert(0, publication).insert(0, HTML_METADATA_1).insert(0, STYLESHEET).insert(0, HTML_METADATA_0).append(HTML_METADATA_2).toString();
+        }
+
+        static boolean findMetadata(String publication) {
+
+            return (publication.contains("<!DOCTYPE html>"));
+        }
+
+        static boolean findStylesheet(String publication) {
+
+            return getStylesheet(publication).equals(STYLESHEET);
+        }
+
+        static String getStylesheet(String publication) {
+
+            return new StringBuilder().append(publication.substring(publication.indexOf("href=\"") + 6, publication.indexOf("\"", publication.indexOf("href=\"") + 6))).toString();
+        }
+
+        static String replaceStylesheet(String publication) {
+
+            int index = publication.indexOf(getStylesheet(publication));
+            int length = getStylesheet(publication).length();
+
+            return new StringBuilder(publication).delete(index, index + length).insert(index, STYLESHEET).toString();
+        }
+    }
+}

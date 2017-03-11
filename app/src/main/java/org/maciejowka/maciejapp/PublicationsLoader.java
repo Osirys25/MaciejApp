@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.widget.Toast;
 import org.json.JSONObject;
-
+import android.util.Log;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -169,7 +169,6 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
 
            publicationsNumber = tempPublicationsNumber;
            pubsDataArray = tempPubsDataArray;
-
        }
        catch(Exception e){
            e.printStackTrace();
@@ -203,7 +202,6 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
         }
 
         return true;
-
     }
 
 
@@ -230,13 +228,16 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
         SharedPreferences sharedPref = maciejAppActivityContext.getSharedPreferences(SHARED_PREFERENCES_NAME, maciejAppActivityContext.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt("publicationsNumber",publicationsNumber);
+
+
+
         for (int i = 0; i < publicationsNumber; i++){
             editor.putString("title"+i,pubsDataArray[i][0]);
             editor.putString("content"+i,pubsDataArray[i][1]);
             editor.putString("modified"+i,pubsDataArray[i][2]);
         }
-        editor.apply();
 
+        editor.apply();
     }
 
     private static boolean restorePubsDataArray(){
@@ -252,9 +253,10 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
                 pubsDataArray[i][2] = prefs.getString("modified"+i,"missing modified");
                 success = pubsDataArray[i][0] != "missing title" && pubsDataArray[i][1] != "missing content" && pubsDataArray[i][2] != "missing modified";
             }
+
         }
-        else{
-            success=false;
+        else {
+            success = false;
         }
 
         return success;
@@ -323,16 +325,4 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
     public static void executeSelf(){
         new PublicationsLoader().executeOnExecutor(SERIAL_EXECUTOR);
     }
-
-
-
-
-
-
-
-
-
-
-
 }
-
