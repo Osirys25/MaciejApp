@@ -65,7 +65,7 @@ public class SinglePublication extends AppCompatActivity {
 
                 else
                     if(!PublicationHTML.findStylesheet(publicationDataArray[1]))
-                        publicationDataArray[1] = PublicationHTML.replaceStylesheet(publicationDataArray[1]);   //podmiana arkuszu CSS
+                        publicationDataArray[1] = PublicationHTML.replaceStylesheet(publicationDataArray[1]);   //podmiana arkusza CSS
 
                 //Log.d("CSS check: ", publicationDataArray[1]);
 
@@ -79,7 +79,6 @@ public class SinglePublication extends AppCompatActivity {
             }
         }//switch
 
-        //przyda się Log.d("MyLog",publicationDataArray[0]+'\n'+publicationDataArray[1]);
     }
 
     private void loadWebView(){

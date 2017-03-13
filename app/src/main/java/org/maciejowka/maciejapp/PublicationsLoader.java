@@ -29,7 +29,7 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
     private static JSONObject archivalPublications;
     private static String[][] pubsDataArray;
     private static String SHARED_PREFERENCES_NAME="LOADER_SHARED_PREFERENCES";
-    public static Context maciejAppActivityContext;
+    public static Context publicationsActivityContext;
     public static PublicationsStatus publicationsStatus = PublicationsStatus.PENDING;
     public static ArrayList<Activity> activitiesToUpDate=new ArrayList<>();
 
@@ -225,7 +225,7 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
     }
 
     private static void savePubsDataArray(){
-        SharedPreferences sharedPref = maciejAppActivityContext.getSharedPreferences(SHARED_PREFERENCES_NAME, maciejAppActivityContext.MODE_PRIVATE);
+        SharedPreferences sharedPref = publicationsActivityContext.getSharedPreferences(SHARED_PREFERENCES_NAME, publicationsActivityContext.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt("publicationsNumber",publicationsNumber);
 
@@ -242,7 +242,7 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
 
     private static boolean restorePubsDataArray(){
         boolean success = true;
-        SharedPreferences prefs = maciejAppActivityContext.getSharedPreferences(SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+        SharedPreferences prefs = publicationsActivityContext.getSharedPreferences(SHARED_PREFERENCES_NAME, MODE_PRIVATE);
         publicationsNumber = prefs.getInt("publicationsNumber",0);
         pubsDataArray = new String[publicationsNumber][];
         if(publicationsNumber>0) {
@@ -295,13 +295,13 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
             }
             case RS_DS_NS:{} //go down
             case RF_DS_NS:{
-                Toast.makeText(maciejAppActivityContext, "Nowe ogłoszenia!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(publicationsActivityContext, "Nowe ogłoszenia!", Toast.LENGTH_SHORT).show();
                 savePubsDataArray();
                 break;
             }
             case RS_DS_MS:{} //go down
             case RF_DS_MS:{
-                Toast.makeText(maciejAppActivityContext, "Zmiany w ogłoszeniach", Toast.LENGTH_SHORT).show();
+                Toast.makeText(publicationsActivityContext, "Zmiany w ogłoszeniach", Toast.LENGTH_SHORT).show();
                 savePubsDataArray();
                 break;
             }
