@@ -1,4 +1,4 @@
-package org.maciejowka.maciejapp;
+package org.maciejowka.maciejapp.dataLoader;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,7 +6,9 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.widget.Toast;
 import org.json.JSONObject;
-import android.util.Log;
+import org.maciejowka.maciejapp.module.publications.ArchivalPublicationsList;
+import org.maciejowka.maciejapp.module.publications.SinglePublication;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;

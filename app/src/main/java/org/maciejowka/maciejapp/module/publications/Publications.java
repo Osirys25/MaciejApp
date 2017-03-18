@@ -1,4 +1,4 @@
-package org.maciejowka.maciejapp;
+package org.maciejowka.maciejapp.module.publications;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import org.maciejowka.maciejapp.R;
+import org.maciejowka.maciejapp.dataLoader.PublicationsLoader;
 
 public class Publications extends AppCompatActivity {
     ListView listView;
