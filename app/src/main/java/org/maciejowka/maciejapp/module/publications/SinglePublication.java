@@ -1,4 +1,4 @@
-package org.maciejowka.maciejapp;
+package org.maciejowka.maciejapp.module.publications;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -6,7 +6,8 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.util.Log;
+import org.maciejowka.maciejapp.R;
+import org.maciejowka.maciejapp.dataLoader.PublicationsLoader;
 
 /**
  * Created by maciej on 17.02.17.

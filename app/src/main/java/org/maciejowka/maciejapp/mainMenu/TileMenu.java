@@ -1,6 +1,5 @@
-package org.maciejowka.maciejapp;
+package org.maciejowka.maciejapp.mainMenu;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +10,8 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import org.maciejowka.maciejapp.module.publications.Publications;
+import org.maciejowka.maciejapp.R;
 
 /**
  * Created by maciej on 11.03.17.
