@@ -1,10 +1,12 @@
-package org.maciejowka.maciejapp;
+package org.maciejowka.maciejapp.module.publications;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.*;
+import org.maciejowka.maciejapp.R;
+import org.maciejowka.maciejapp.dataLoader.PublicationsLoader;
 
 import java.util.ArrayList;
 

@@ -4,7 +4,7 @@
     android:id="@+id/activity_maciej_app"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.maciejowka.maciejapp.Publications">
+    tools:context="org.maciejowka.maciejapp.module.publications.Publications">
 
     <ListView
             android:layout_width="match_parent"
