@@ -37,4 +37,5 @@ dependencies {
     androidTestCompile 'com.android.support.test:rules:0.5'
     androidTestCompile 'com.android.support:appcompat-v7:26.0.0-alpha1'
     androidTestCompile 'com.android.support:support-v4:26.0.0-alpha1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }
