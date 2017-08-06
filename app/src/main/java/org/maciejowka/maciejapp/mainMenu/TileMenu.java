@@ -10,8 +10,8 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import org.maciejowka.maciejapp.module.publications.Publications;
 import org.maciejowka.maciejapp.R;
+import org.maciejowka.maciejapp.publications.SinglePublication;
 
 /**
  * Created by maciej on 11.03.17.
@@ -28,7 +28,7 @@ public class TileMenu extends AppCompatActivity {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(), Publications.class);
+                Intent intent = new Intent(getApplicationContext(), SinglePublication.class);
                 startActivity(intent);
             }
         });

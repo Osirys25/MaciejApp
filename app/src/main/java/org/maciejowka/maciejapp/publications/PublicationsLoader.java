@@ -1,4 +1,4 @@
-package org.maciejowka.maciejapp.dataLoader;
+package org.maciejowka.maciejapp.publications;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,8 +6,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.widget.Toast;
 import org.json.JSONObject;
-import org.maciejowka.maciejapp.module.publications.ArchivalPublicationsList;
-import org.maciejowka.maciejapp.module.publications.SinglePublication;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -31,7 +29,7 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
     private static JSONObject archivalPublications;
     private static String[][] pubsDataArray;
     private static String SHARED_PREFERENCES_NAME="LOADER_SHARED_PREFERENCES";
-    public static Context publicationsActivityContext;
+    public static Context singleActivityContext;
     public static PublicationsStatus publicationsStatus = PublicationsStatus.PENDING;
     public static ArrayList<Activity> activitiesToUpDate=new ArrayList<>();
 
@@ -227,7 +225,7 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
     }
 
     private static void savePubsDataArray(){
-        SharedPreferences sharedPref = publicationsActivityContext.getSharedPreferences(SHARED_PREFERENCES_NAME, publicationsActivityContext.MODE_PRIVATE);
+        SharedPreferences sharedPref = singleActivityContext.getSharedPreferences(SHARED_PREFERENCES_NAME, singleActivityContext.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt("publicationsNumber",publicationsNumber);
 
@@ -244,7 +242,7 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
 
     private static boolean restorePubsDataArray(){
         boolean success = true;
-        SharedPreferences prefs = publicationsActivityContext.getSharedPreferences(SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+        SharedPreferences prefs = singleActivityContext.getSharedPreferences(SHARED_PREFERENCES_NAME, MODE_PRIVATE);
         publicationsNumber = prefs.getInt("publicationsNumber",0);
         pubsDataArray = new String[publicationsNumber][];
         if(publicationsNumber>0) {
@@ -290,6 +288,16 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
         upDateActivities();
 
         switch(result){
+            case RS_DF:{
+                Toast toast = Toast.makeText(singleActivityContext, "Sprawdź połączenie z internetem ;)", Toast.LENGTH_SHORT);
+                toast.show();
+                break;
+            }
+            case RF_DF:{
+                Toast toast = Toast.makeText(singleActivityContext, "Sprawdź połączenie z internetem ;)", Toast.LENGTH_SHORT);
+                toast.show();
+                break;
+            }
             case RS:{} //go down
             case RF:{
                 new PublicationsLoader().execute();
@@ -297,13 +305,13 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
             }
             case RS_DS_NS:{} //go down
             case RF_DS_NS:{
-                Toast.makeText(publicationsActivityContext, "Nowe ogłoszenia!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(singleActivityContext, "Nowe ogłoszenia!", Toast.LENGTH_SHORT).show();
                 savePubsDataArray();
                 break;
             }
             case RS_DS_MS:{} //go down
             case RF_DS_MS:{
-                Toast.makeText(publicationsActivityContext, "Zmiany w ogłoszeniach", Toast.LENGTH_SHORT).show();
+                Toast.makeText(singleActivityContext, "Zmiany w ogłoszeniach", Toast.LENGTH_SHORT).show();
                 savePubsDataArray();
                 break;
             }
@@ -316,9 +324,6 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
         for(int ii=0;ii<activitiesToUpDate.size();ii++){
             if(activitiesToUpDate.get(ii) instanceof SinglePublication){
                 ((SinglePublication) activitiesToUpDate.get(ii)).upDatePublication();
-            }
-            else if(activitiesToUpDate.get(ii) instanceof ArchivalPublicationsList){
-                ((ArchivalPublicationsList) activitiesToUpDate.get(ii)).upDateArchivalPublicationsList();
             }
         }//for
 
