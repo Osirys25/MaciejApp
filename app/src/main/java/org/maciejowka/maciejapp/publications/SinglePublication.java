@@ -1,4 +1,4 @@
-package org.maciejowka.maciejapp.module.publications;
+package org.maciejowka.maciejapp.publications;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,7 +7,6 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import org.maciejowka.maciejapp.R;
-import org.maciejowka.maciejapp.dataLoader.PublicationsLoader;
 
 /**
  * Created by maciej on 17.02.17.
@@ -27,6 +26,9 @@ public class SinglePublication extends AppCompatActivity {
         PublicationsLoader.activitiesToUpDate.add(this); //handler to this activity, allows PublicationsLoader to upDate this Activity data
         refreshButton = (Button) findViewById(R.id.refreshButton);
         buttonLayout = (LinearLayout) findViewById(R.id.buttonLayout);
+        PublicationsLoader.singleActivityContext = this;
+        new PublicationsLoader().executeSelf();
+        PublicationsLoader.loadPublications();
         upDatePublication();
     }
 
@@ -44,20 +46,11 @@ public class SinglePublication extends AppCompatActivity {
             case RF_DS_MS: //go down
             case RS_DF: //go down
             case RS:{
-                int position = getIntent().getIntExtra("position", 0);
-                boolean isCurrent = getIntent().getBooleanExtra("current", true);
 
-                if (isCurrent) {
                     showRefreshButton();
                     publicationDataArray[0] = PublicationsLoader.getPubsDataArray()[0][0];
                     publicationDataArray[1] = PublicationsLoader.getPubsDataArray()[0][1];
-                }
-                else{
-                    hideRefreshButton();
-                    position += 1; //poprawka na pozycję archiwalnych ogłoszeń
-                    publicationDataArray[0] = PublicationsLoader.getPubsDataArray()[position][0];
-                    publicationDataArray[1] = PublicationsLoader.getPubsDataArray()[position][1];
-                }
+
 
                 //CSS metadata
 
