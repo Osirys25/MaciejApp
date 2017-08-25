@@ -1,24 +1,25 @@
-package org.maciejowka.maciejapp.events;
+package org.maciejowka.maciejapp.events.model;
 
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 
 /**
  * Created by maciej on 25.08.17.
  */
 public class EventModel {
     private String title;
-    private String date;
+    private String dateAccurate;
     private String duration;
     private String summary;
-    private BitmapDrawable poster;
+    private String posterHardcoded;
     private String posterUrl;
 
-    public EventModel(String title, String date, String duration, String summary, BitmapDrawable poster, String posterUrl) {
+    public EventModel(String title, String dateAccurate, String duration, String summary, String posterHardcoded, String posterUrl, Bitmap poster) {
         this.title = title;
-        this.date = date;
+        this.dateAccurate = dateAccurate;
         this.duration = duration;
         this.summary = summary;
-        this.poster = poster;
+        this.posterHardcoded = posterHardcoded;
         this.posterUrl = posterUrl;
     }
 
@@ -30,12 +31,12 @@ public class EventModel {
         this.title = title;
     }
 
-    public String getDate() {
-        return date;
+    public String getDateAccurate() {
+        return dateAccurate;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setDateAccurate(String dateAccurate) {
+        this.dateAccurate = dateAccurate;
     }
 
     public String getDuration() {
@@ -54,12 +55,12 @@ public class EventModel {
         this.summary = summary;
     }
 
-    public BitmapDrawable getPoster() {
-        return poster;
+    public String getPosterHardcoded() {
+        return posterHardcoded;
     }
 
-    public void setPoster(BitmapDrawable poster) {
-        this.poster = poster;
+    public void setPosterHardcoded(String posterHardcoded) {
+        this.posterHardcoded = posterHardcoded;
     }
 
     public String getPosterUrl() {
@@ -69,4 +70,9 @@ public class EventModel {
     public void setPosterUrl(String posterUrl) {
         this.posterUrl = posterUrl;
     }
+
+    public boolean hasPosterUrl() {
+        return posterUrl != null;
+    }
+
 }

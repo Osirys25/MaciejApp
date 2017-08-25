@@ -1,34 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white">
 
+    <include layout="@layout/frame_event"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content" android:layout_alignParentTop="true"
+             android:layout_centerHorizontal="true" android:id="@+id/posterLayout"/>
     <TextView
-            android:text="Nazwa wydarzenia"
+            android:text="Rozpoczęcie: "
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" android:layout_marginTop="8dp" android:id="@+id/title"/>
-    <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" app:srcCompat="@mipmap/ic_launcher"
-            android:layout_below="@+id/title" android:layout_centerHorizontal="true" android:layout_marginTop="8dp"
-            android:id="@+id/poster"/>
-    <TextView
-            android:text="Rozpoczęcie"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:layout_below="@+id/poster"
+            android:layout_height="wrap_content" android:layout_below="@+id/posterLayout"
             android:layout_alignParentStart="true" android:layout_marginStart="8dp" android:layout_marginTop="8dp"
             android:id="@+id/date"/>
     <TextView
-            android:text="Czas trwania"
+            android:text="Czas trwania: "
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:layout_below="@+id/date"
             android:layout_alignStart="@+id/date" android:layout_marginTop="8dp" android:id="@+id/duration"/>
-    <TextView
-            android:text="28.09.2017"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:layout_alignTop="@+id/date"
-            android:layout_toEndOf="@+id/date" android:layout_marginStart="8dp" android:id="@+id/dateCont"/>
     <TextView
             android:text="3 dni"
             android:layout_width="wrap_content"
@@ -38,5 +29,11 @@
             android:text="Opis"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:layout_below="@+id/duration"
-            android:layout_alignStart="@+id/duration" android:layout_marginTop="8dp" android:id="@+id/summaryCont"/>
+            android:layout_alignStart="@+id/duration" android:layout_marginTop="8dp" android:id="@+id/summaryCont"
+            android:layout_marginBottom="8dp"/>
+    <TextView
+            android:text="28.09.2017"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/dateCont" android:layout_above="@+id/duration" android:layout_centerHorizontal="true"/>
 </RelativeLayout>
