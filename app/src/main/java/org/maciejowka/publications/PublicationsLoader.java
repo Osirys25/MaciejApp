@@ -1,4 +1,4 @@
-package org.maciejowka.maciejapp.publications;
+package org.maciejowka.publications;
 
 import android.app.Activity;
 import android.content.Context;
