@@ -1,4 +1,4 @@
-package org.maciejowka.fragments;
+package org.maciejowka.notices;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,9 +11,9 @@ import org.maciejowka.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ScheduleFragment extends Fragment {
+public class NoticesFragment extends Fragment {
 
-    public ScheduleFragment() {
+    public NoticesFragment() {
         // Required empty public constructor
     }
 
@@ -21,6 +21,6 @@ public class ScheduleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_schedule, container, false);
+        return inflater.inflate(R.layout.fragment_notices, container, false);
     }
 }
