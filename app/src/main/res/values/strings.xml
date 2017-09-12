@@ -1,4 +1,15 @@
 <resources>
     <string name="app_name">Maciejówka</string>
+
+    <!-- Navigation drawer -->
+    <string name="menu_item_events">Wydarzenia</string>
+    <string name="menu_item_notices">Ogłoszenia</string>
+    <string name="menu_item_schedule">Plan dnia</string>
+    <string name="menu_item_contact">Kontakt</string>
+    <string name="menu_item_about">O aplikacji</string>
+
+    <string name="open_drawer">Open navigation drawer</string>
+    <string name="close_drawer">Close navigation drawer</string>
+
     <string name="test_maciek">test_maciek</string>
 </resources>
