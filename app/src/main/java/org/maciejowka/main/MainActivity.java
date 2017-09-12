@@ -1,10 +1,12 @@
-package org.maciejowka.activities;
+package org.maciejowka.main;
 
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,9 +15,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import org.maciejowka.R;
-import org.maciejowka.fragments.EventsFragment;
-import org.maciejowka.fragments.NoticesFragment;
-import org.maciejowka.fragments.ScheduleFragment;
+import org.maciejowka.events.EventsFragment;
+import org.maciejowka.notices.NoticesFragment;
+import org.maciejowka.publications.SinglePublication;
+import org.maciejowka.schedule.ScheduleFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,52 +30,60 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        NavigationView navigationView = findViewById(R.id.navigation_view);
         setupDrawerContent(navigationView);
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
         mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer);
         mDrawerLayout.addDrawerListener(mActionBarDrawerToggle);
 
+        MenuItem item = navigationView.getMenu().getItem(0);
         setFragment(EventsFragment.class);
-        navigationView.getMenu().getItem(0).setChecked(true);
+        item.setChecked(true);
+        setTitle(item.getTitle());
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                setFragment(selectDrawerItem(item));
+                selectDrawerItem(item);
                 item.setChecked(true);
                 setTitle(item.getTitle());
-                mDrawerLayout.closeDrawers();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDrawerLayout.closeDrawers();
+                    }
+                }, 0);
                 return true;
             }
         });
     }
 
-    private Class selectDrawerItem(MenuItem item) {
+    private void selectDrawerItem(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_events:
-                return EventsFragment.class;
-
+                setFragment(EventsFragment.class);
+                break;
             case R.id.nav_notices:
-                return NoticesFragment.class;
-
+//                setFragment(NoticesFragment.class);
+                Intent intent = new Intent(this, SinglePublication.class);
+                startActivity(intent);
+                break;
             case R.id.nav_schedule:
-                return ScheduleFragment.class;
-
+                setFragment(ScheduleFragment.class);
+                break;
             case R.id.nav_contact:
-                return EventsFragment.class;
-
+//                setFragment(EventsFragment.class);
+                break;
             case R.id.nav_about:
-                return EventsFragment.class;
-
-            default:
-                return EventsFragment.class;
+//                setFragment(EventsFragment.class);
+                break;
         }
     }
 
@@ -83,8 +94,17 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.main_activity_content, fragment).commit();
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_EXIT_MASK)
+                .replace(R.id.main_activity_content, fragment)
+                .commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
     }
 
     @Override
