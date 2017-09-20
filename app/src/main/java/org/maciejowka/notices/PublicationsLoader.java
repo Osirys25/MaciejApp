@@ -1,38 +1,33 @@
-package org.maciejowka.publications;
+package org.maciejowka.notices;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.util.Log;
+import android.support.v4.app.Fragment;
 import android.widget.Toast;
+
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
 
-/**
- * Created by maciej on 17.02.17.
- */
-
 public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.PublicationsStatus> {
-
 
     private static final String currentURL="http://www.maciejowka.org/klepson/get_category_posts/?slug=ogloszenia-duszpasterskie";
     private static final String archivalURL="http://www.maciejowka.org/klepson/get_category_posts/?slug=archiwum";
-    private static int publicationsNumber;
-    private static JSONObject currentPublication;
-    private static JSONObject archivalPublications;
-    private static String[][] pubsDataArray;
-    private static String SHARED_PREFERENCES_NAME="LOADER_SHARED_PREFERENCES";
-    public static Context singleActivityContext;
-    public static PublicationsStatus publicationsStatus = PublicationsStatus.PENDING;
-    public static ArrayList<Activity> activitiesToUpDate=new ArrayList<>();
+    private int publicationsNumber;
+    private JSONObject currentPublication;
+    private JSONObject archivalPublications;
+    private String[][] pubsDataArray;
+    private String SHARED_PREFERENCES_NAME="LOADER_SHARED_PREFERENCES";
+    public Context singleActivityContext;
+    public PublicationsStatus publicationsStatus = PublicationsStatus.PENDING;
+    public Fragment fragmentToUpdate;
+    public boolean isFragmentAvailable = false;
 
     private enum DownloadingStatus {
         NEW, UP_TO_DATE, FAILURE, MODIFIED
@@ -48,7 +43,7 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
         PENDING, RS, RF, RS_DS_NS, RS_DS_MF, RS_DS_MS, RS_DF, RF_DS_NS, RF_DS_MS, RF_DS_MF, RF_DF
     }
 
-    public static PublicationsStatus loadPublications(){
+    public PublicationsStatus loadPublications(){
 
         PublicationsStatus returnStatement= publicationsStatus;
 
@@ -112,7 +107,7 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
         return returnStatement;
     }
 
-    public static DownloadingStatus JSONObjectsToDataArray(){
+    public DownloadingStatus JSONObjectsToDataArray(){
 
         boolean pubsModified=false;
         boolean newPubs=false;
@@ -183,12 +178,12 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
        return returnDownloadingStatus;
     }
 
-    private static DownloadingStatus downloadPubsToDataArray(){
+    private DownloadingStatus downloadPubsToDataArray(){
         loadPublicationsToJSONObjects();
         return JSONObjectsToDataArray();
     }
 
-    private static boolean loadPublicationsToJSONObjects(){
+    private boolean loadPublicationsToJSONObjects(){
         //returns false if failed
 
         try {
@@ -206,7 +201,7 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
     }
 
 
-    private static String getJSONfromURL(String url) throws Exception {
+    private String getJSONfromURL(String url) throws Exception {
         URL website = new URL(url);
         URLConnection connection = website.openConnection();
         connection.setRequestProperty("User-Agent", "Mozilla/5.0");
@@ -225,12 +220,10 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
         return response.toString();
     }
 
-    private static void savePubsDataArray(){
-        SharedPreferences sharedPref = singleActivityContext.getSharedPreferences(SHARED_PREFERENCES_NAME, singleActivityContext.MODE_PRIVATE);
+    private void savePubsDataArray(){
+        SharedPreferences sharedPref = singleActivityContext.getSharedPreferences(SHARED_PREFERENCES_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt("publicationsNumber",publicationsNumber);
-
-
 
         for (int i = 0; i < publicationsNumber; i++){
             editor.putString("title"+i,pubsDataArray[i][0]);
@@ -241,7 +234,7 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
         editor.apply();
     }
 
-    private static boolean restorePubsDataArray(){
+    private boolean restorePubsDataArray(){
         boolean success = true;
         SharedPreferences prefs = singleActivityContext.getSharedPreferences(SHARED_PREFERENCES_NAME, MODE_PRIVATE);
         publicationsNumber = prefs.getInt("publicationsNumber",0);
@@ -263,17 +256,12 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
         return success;
     }
 
-    public static int getpubsNumber(){
-        return publicationsNumber;
-    }
-
-    public static String[][] getPubsDataArray() {
+    public String[][] getPubsDataArray() {
         return pubsDataArray;
     }
 
     @Override
     protected PublicationsStatus doInBackground(Void... params) {
-
         return loadPublications();
     }
 
@@ -284,53 +272,49 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
 
     @Override
     protected void onPostExecute(PublicationsStatus result) {
+        if (isFragmentAvailable) {
+            publicationsStatus = result;
+            upDateActivities();
 
-        publicationsStatus = result;
-        upDateActivities();
-
-        switch(result){
-            case RS_DF:{
-                Toast toast = Toast.makeText(singleActivityContext, "Sprawdź połączenie z internetem ;)", Toast.LENGTH_SHORT);
-                toast.show();
-                break;
-            }
-            case RF_DF:{
-                Toast toast = Toast.makeText(singleActivityContext, "Sprawdź połączenie z internetem ;)", Toast.LENGTH_SHORT);
-                toast.show();
-                break;
-            }
-            case RS:{} //go down
-            case RF:{
-                new PublicationsLoader().execute();
-                break;
-            }
-            case RS_DS_NS:{} //go down
-            case RF_DS_NS:{
-                Toast.makeText(singleActivityContext, "Nowe ogłoszenia!", Toast.LENGTH_SHORT).show();
-                savePubsDataArray();
-                break;
-            }
-            case RS_DS_MS:{} //go down
-            case RF_DS_MS:{
-                Toast.makeText(singleActivityContext, "Zmiany w ogłoszeniach", Toast.LENGTH_SHORT).show();
-                savePubsDataArray();
-                break;
+            switch(result){
+                case RS_DF:{
+                    Toast toast = Toast.makeText(singleActivityContext, "Sprawdź połączenie z internetem ;)", Toast.LENGTH_SHORT);
+                    toast.show();
+                    break;
+                }
+                case RF_DF:{
+                    Toast toast = Toast.makeText(singleActivityContext, "Sprawdź połączenie z internetem ;)", Toast.LENGTH_SHORT);
+                    toast.show();
+                    break;
+                }
+                case RS:{} //go down
+                case RF:{
+//                new PublicationsLoader().execute();
+                    break;
+                }
+                case RS_DS_NS:{} //go down
+                case RF_DS_NS:{
+                    Toast.makeText(singleActivityContext, "Nowe ogłoszenia!", Toast.LENGTH_SHORT).show();
+                    savePubsDataArray();
+                    break;
+                }
+                case RS_DS_MS:{} //go down
+                case RF_DS_MS:{
+                    Toast.makeText(singleActivityContext, "Zmiany w ogłoszeniach", Toast.LENGTH_SHORT).show();
+                    savePubsDataArray();
+                    break;
+                }
             }
         }
-
     }
 
-    private void upDateActivities(){
-
-        for(int ii=0;ii<activitiesToUpDate.size();ii++){
-            if(activitiesToUpDate.get(ii) instanceof SinglePublication){
-                ((SinglePublication) activitiesToUpDate.get(ii)).upDatePublication();
-            }
-        }//for
-
+    private void upDateActivities() {
+        if (fragmentToUpdate instanceof NoticesFragment) {
+            ((NoticesFragment) fragmentToUpdate).upDatePublication();
+        }
     }
 
-    public static void executeSelf(){
+    public static void executeSelf() {
         new PublicationsLoader().executeOnExecutor(SERIAL_EXECUTOR);
     }
 }
