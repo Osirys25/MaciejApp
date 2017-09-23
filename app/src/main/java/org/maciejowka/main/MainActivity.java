@@ -1,7 +1,7 @@
 package org.maciejowka.main;
 
-import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -10,20 +10,18 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import org.maciejowka.R;
 import org.maciejowka.events.EventsFragment;
 import org.maciejowka.notices.NoticesFragment;
-import org.maciejowka.publications.SinglePublication;
 import org.maciejowka.schedule.ScheduleFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    private DrawerLayout mDrawerLayout;
-    private ActionBarDrawerToggle mActionBarDrawerToggle;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,14 +34,18 @@ public class MainActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.navigation_view);
         setupDrawerContent(navigationView);
 
-        mDrawerLayout = findViewById(R.id.drawer_layout);
-        mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer);
-        mDrawerLayout.addDrawerListener(mActionBarDrawerToggle);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
 
-        MenuItem item = navigationView.getMenu().getItem(0);
-        setFragment(EventsFragment.class);
-        item.setChecked(true);
-        setTitle(item.getTitle());
+        if (savedInstanceState == null) {
+            MenuItem item = navigationView.getMenu().getItem(0);
+            setFragment(EventsFragment.class);
+            item.setChecked(true);
+            setTitle(item.getTitle());
+        } else {
+            setTitle(savedInstanceState.getString("title"));
+        }
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -57,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mDrawerLayout.closeDrawers();
+                        drawerLayout.closeDrawers();
                     }
                 }, 0);
                 return true;
@@ -71,9 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 setFragment(EventsFragment.class);
                 break;
             case R.id.nav_notices:
-//                setFragment(NoticesFragment.class);
-                Intent intent = new Intent(this, SinglePublication.class);
-                startActivity(intent);
+                setFragment(NoticesFragment.class);
                 break;
             case R.id.nav_schedule:
                 setFragment(ScheduleFragment.class);
@@ -103,25 +103,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        moveTaskToBack(true);
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("title", (String) getTitle());
     }
 
     @Override
     public void onPostCreate(Bundle savedInstance) {
         super.onPostCreate(savedInstance);
-        mActionBarDrawerToggle.syncState();
+        actionBarDrawerToggle.syncState();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        mActionBarDrawerToggle.onConfigurationChanged(newConfig);
+        actionBarDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mActionBarDrawerToggle.onOptionsItemSelected(item))
+        if (actionBarDrawerToggle.onOptionsItemSelected(item))
             return true;
         return super.onOptionsItemSelected(item);
     }
