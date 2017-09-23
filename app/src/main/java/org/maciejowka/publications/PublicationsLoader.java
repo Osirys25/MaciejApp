@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 import org.json.JSONObject;
 
@@ -246,12 +247,12 @@ public class PublicationsLoader extends AsyncTask<Void,Void,PublicationsLoader.P
         publicationsNumber = prefs.getInt("publicationsNumber",0);
         pubsDataArray = new String[publicationsNumber][];
         if(publicationsNumber>0) {
-            for (int i = 0; i < publicationsNumber&&success; i++){
+            for (int i = 0; i < publicationsNumber&&success; i++) {
                 pubsDataArray[i] = new String[3];
                 pubsDataArray[i][0] = prefs.getString("title"+i,"missing title");
                 pubsDataArray[i][1] = prefs.getString("content"+i,"missing content");
                 pubsDataArray[i][2] = prefs.getString("modified"+i,"missing modified");
-                success = pubsDataArray[i][0] != "missing title" && pubsDataArray[i][1] != "missing content" && pubsDataArray[i][2] != "missing modified";
+                success = !pubsDataArray[i][0].equals("missing title") && !pubsDataArray[i][1].equals("missing content") && !pubsDataArray[i][2].equals("missing modified");
             }
 
         }
