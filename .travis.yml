@@ -16,7 +16,6 @@ android:
     - extra-android-support
     - extra-android-m2repository
     - extra-google-m2repository
-    - sys-img-armeabi-v7a-android-26.0.1
   target:
     - android-26
     
@@ -30,13 +29,7 @@ licenses:
     - 'android-sdk-preview-license-.+'
     - 'android-sdk-license-.+'
     - 'google-gdk-license-.+'
-    - android update sdk --no-ui --filter build-tools-26.0.1,android-26,platform-tools,tools,extra-android-support,extra-android-m2repository,extra-google-m2repository,sys-img-armeabi-v7a-android-26.0.1
-
-before_script:		
-    - echo no | android create avd --force -n test -t android-26 --abi armeabi-v7a
-    - emulator -avd test -no-skin -no-audio -no-window &
-    - adb wait-for-device
-    - adb shell input keyevent 82 &
+    - android update sdk --no-ui --filter build-tools-26.0.1,android-26,platform-tools,tools,extra-android-support,extra-android-m2repository,extra-google-m2repository
 
 before_deploy:
   - cp ./app/build/outputs/apk/*.apk .
