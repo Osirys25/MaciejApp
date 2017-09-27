@@ -16,7 +16,6 @@ import android.view.MenuItem;
 
 import org.maciejowka.R;
 import org.maciejowka.events.EventsFragment;
-import org.maciejowka.notices.NoticesFragment;
 import org.maciejowka.publications.SinglePublication;
 import org.maciejowka.schedule.ScheduleFragment;
 
