@@ -68,7 +68,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
     }
 
     private void setSummary() {
-        holder.durationContView.setText(events.get(position).getDuration());
+        holder.summaryContView.setText(events.get(position).getSummary());
     }
 
     private void setDuration() {
