@@ -2,24 +2,28 @@ package org.maciejowka.events.data;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.text.format.DateUtils;
 import android.util.Log;
 import org.maciejowka.events.EventsFragment;
+import org.maciejowka.events.data.exception.ApiJsonParserException;
+import org.maciejowka.events.data.exception.JSONDownloaderException;
 import org.maciejowka.events.model.EventDate;
 import org.maciejowka.events.model.EventDateException;
 import org.maciejowka.events.model.EventModel;
 import org.maciejowka.events.model.EventDateComparator;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by maciej on 12.09.17.
  */
-public class EventsProvider extends AsyncTask<Void, Void, Result<List<EventModel>>> {
+public class EventsProvider extends AsyncTask<Void, Void, List<EventModel>> {
 
-    private static final String EVENTS_SOURCE = "https://raw.githubusercontent.com/mcPear/hello-word/master/events.json";
-    private static final int DOWNLOADING_ATTEMPTS = 5;
+    private static final String EVENTS_CYCLIC_SOURCE = "http://www.maciejowka.org/wp-json/tribe/events/v1/events?tags[]=cyclic";
+    private static final String EVENTS_TODAY_AND_TOMORROW_SOURCE_SCHEMA =
+            "http://www.maciejowka.org/wp-json/tribe/events/v1/events?start_date=%s&end_date=%s&categories[]=app";
+    private final static String DATE_FORMAT = "yyyy-MM-dd";
     private final EventsFragment eventsFragment;
 
     public EventsProvider(EventsFragment fragment) {
@@ -77,17 +81,6 @@ public class EventsProvider extends AsyncTask<Void, Void, Result<List<EventModel
         }
     }
 
-    @Override
-    protected Result<List<EventModel>> doInBackground(Void[] params) {
-        provideDebugger();
-        Result<String> eventsJsonDownloadResult = downloadEvents();
-        if (eventsJsonDownloadResult.isSuccess()) {
-            return handleEventsJsonDownloadSuccess(eventsJsonDownloadResult);
-        } else {
-            return getEventsFromMemory();
-        }
-    }
-
     private void provideDebugger() {
         if (android.os.Debug.isDebuggerConnected())
             android.os.Debug.waitForDebugger();
@@ -133,8 +126,61 @@ public class EventsProvider extends AsyncTask<Void, Void, Result<List<EventModel
         return new EventsReader(context).read();
     }
 
-    private Result<String> downloadEvents() {
-        return new EventsDownloader(EVENTS_SOURCE, DOWNLOADING_ATTEMPTS).download();
+    @Override
+    protected List<EventModel> doInBackground(Void[] params) {
+        provideDebugger();
+        return getEvents();
+    }
+
+    private List<EventModel> getEvents(){
+        try{
+            return downloadEvents();
+        }
+        catch (Exception e){
+            return getEventsFromMemory();
+        }
+    }
+
+    private List<EventModel> downloadEvents() throws JSONDownloaderException{
+        String eventsCyclicJson = downloadCyclicEventsJson();
+        String eventsTodayAndTomorrowJson = downloadTodayAndTomorrowEventsJson();
+        List<WordpressEvent> eventsWordpress = getWordpressEventsFromApiJsons(eventsCyclicJson, eventsTodayAndTomorrowJson);
+    }
+
+    List<WordpressEvent> getWordpressEventsFromApiJsons(String cyclicEventsJson, String todayAndTomorrowEventsJson) throws ApiJsonParserException{
+        return new ApiJsonParser(cyclicEventsJson, todayAndTomorrowEventsJson).parseToWordpressEvents();
+    }
+
+    private String downloadCyclicEventsJson() throws JSONDownloaderException{ //or catch here and return empty_string
+            return new JSONDownloader(EVENTS_CYCLIC_SOURCE).download();
+    }
+
+    private String downloadTodayAndTomorrowEventsJson() throws JSONDownloaderException{ //or catch here and return empty_string
+        String source = getEventsTodayAndTomorrowSource();
+        return new JSONDownloader(source).download();
+    }
+//TODO tworzenie source urls wyrzucić do factory czy coś takiego
+    private String getEventsTodayAndTomorrowSource(){
+        String dateToday = getDateToday();
+        String dateTomorrow = getDateTomorrow();
+        return String.format(EVENTS_TODAY_AND_TOMORROW_SOURCE_SCHEMA, dateToday, dateTomorrow);
+    }
+
+    private String getDateToday(){
+        return getDate(new Date());
+    }
+
+    private String getDateTomorrow(){
+        return getDate(getTomorrowDate());
+    }
+
+    private Date getTomorrowDate() {
+        return new Date(System.currentTimeMillis() + DateUtils.DAY_IN_MILLIS);
+    }
+
+    private String getDate(Date eventDateTime) {
+        SimpleDateFormat dateOnlyFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
+        return dateOnlyFormat.format(eventDateTime);
     }
 
 }

@@ -1,5 +1,7 @@
 package org.maciejowka.events.data;
 
+import org.maciejowka.events.data.exception.JSONDownloaderException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,52 +11,25 @@ import java.net.URLConnection;
 /**
  * Created by maciej on 12.09.17.
  */
-public class EventsDownloader {
+public class JSONDownloader {
 
-    private static final String FAILURE_MESSAGE = "downloading events json failure";
     private static final String REQUEST_AGENT = "User-Agent";
     private static final String REQUEST_BROWSER = "Mozilla/5.0";
     private final String url;
-    private final int attempts;
 
-    public EventsDownloader(String url, int attempts) {
+    public JSONDownloader(String url) {
         this.url = url;
-        this.attempts = attempts;
     }
 
-    public Result<String> download() {
-        Result<String> allAttemptsResult = performAllAttempts();
-
-        if (allAttemptsResult.isSuccess()) {
-            String eventsJson = allAttemptsResult.getData();
-            return Result.success(eventsJson);
-        } else {
-            return Result.failure(FAILURE_MESSAGE);
-        }
-
-    }
-
-    private Result<String> performAllAttempts() {
-        boolean success = false;
-        String eventsJson = null;
-
-        for (int i = 0; i < attempts && !success; i++) {
-            try {
-                eventsJson = performAttempt();
-                success = true;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        if (success) {
-            return Result.success(eventsJson);
-        } else {
-            return Result.failure(FAILURE_MESSAGE);
+    public String download() throws JSONDownloaderException {
+        try {
+            return tryToDownload();
+        } catch (IOException e) {
+            throw new JSONDownloaderException(e.getMessage());
         }
     }
 
-    private String performAttempt() throws IOException {
+    private String tryToDownload() throws IOException {
         URLConnection connection = getConnection();
         return downloadDataFromConnection(connection);
     }

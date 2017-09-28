@@ -5,13 +5,16 @@ import android.graphics.Bitmap;
 /**
  * Created by maciej on 25.08.17.
  */
-public class EventModel {
+public class EventModel { //FIXME name it just Event
     private String title;
     private String dateAccurate;
     private String duration;
     private String summary;
     private String posterHardcoded;
     private String posterUrl;
+
+    public EventModel() {
+    }
 
     public EventModel(String title, String dateAccurate, String duration, String summary, String posterHardcoded, String posterUrl, Bitmap poster) {
         this.title = title;
