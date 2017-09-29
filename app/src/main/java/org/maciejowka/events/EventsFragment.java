@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,9 +22,6 @@ import org.maciejowka.events.model.EventModel;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class EventsFragment extends Fragment {
 
     private RecyclerView recyclerView;
@@ -32,6 +30,7 @@ public class EventsFragment extends Fragment {
     private NextEventMarkerUpdater nextEventMarkerUpdater;
     private IntentFilter nextEventMarkerIntentFilter;
     private Activity activity;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,6 +52,17 @@ public class EventsFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         adapter = new EventsAdapter(new ArrayList<EventModel>(), activity.getApplicationContext());
         recyclerView.setAdapter(adapter);
+        setSwipeRefreshLayout();
+    }
+
+    private void setSwipeRefreshLayout() {
+        swipeRefreshLayout = getView().findViewById(R.id.fragment_events_swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                executeEventsProvider();
+            }
+        });
     }
 
     private void executeEventsProvider() {
@@ -99,4 +109,7 @@ public class EventsFragment extends Fragment {
         return activity.getApplicationContext();
     }
 
+    public void stopRefreshing() {
+        swipeRefreshLayout.setRefreshing(false);
+    }
 }

@@ -8,9 +8,6 @@ import android.view.ViewGroup;
 
 import org.maciejowka.R;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class ScheduleFragment extends Fragment {
 
     public ScheduleFragment() {
