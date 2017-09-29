@@ -5,14 +5,18 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import org.maciejowka.R;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by maciej on 10.09.17.
  */
 public class PosterHardcodedFactory {
-    //TODO hardcode every possible poster
+    //TODO zahardcodować wszystkie tagi
     private static final String DINNER = "obiad";
     private static final String CLEANING = "sprzatanie";
     private static final String BOARD_GAMES = "planszowki";
+    public static final List<String> posterTags = Arrays.asList(DINNER, CLEANING, BOARD_GAMES);
 
     public static Drawable getPoster(String name, Context context) {
         switch (name) {

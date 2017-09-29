@@ -145,6 +145,7 @@ public class EventsProvider extends AsyncTask<Void, Void, List<EventModel>> {
         String eventsCyclicJson = downloadCyclicEventsJson();
         String eventsTodayAndTomorrowJson = downloadTodayAndTomorrowEventsJson();
         List<WordpressEvent> eventsWordpress = getWordpressEventsFromApiJsons(eventsCyclicJson, eventsTodayAndTomorrowJson);
+        //filter cyclic events !
     }
 
     List<WordpressEvent> getWordpressEventsFromApiJsons(String cyclicEventsJson, String todayAndTomorrowEventsJson) throws ApiJsonParserException{

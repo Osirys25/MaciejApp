@@ -2,6 +2,9 @@ package org.maciejowka.events.model;
 
 import android.graphics.Bitmap;
 
+import java.util.Calendar;
+import java.util.List;
+
 /**
  * Created by maciej on 25.08.17.
  */
@@ -12,6 +15,7 @@ public class EventModel { //FIXME name it just Event
     private String summary;
     private String posterHardcoded;
     private String posterUrl;
+    private List<Integer> weekDays;
 
     public EventModel() {
     }
@@ -77,4 +81,11 @@ public class EventModel { //FIXME name it just Event
         return posterUrl != null;
     }
 
+    public List<Integer> getWeekDays() {
+        return weekDays;
+    }
+
+    public void setWeekDays(List<Integer> weekDays) {
+        this.weekDays = weekDays;
+    }
 }
