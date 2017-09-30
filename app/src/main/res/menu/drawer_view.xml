@@ -10,21 +10,21 @@
         <item
             android:id="@+id/nav_notices"
             android:title="@string/menu_item_notices"/>
-        <item
-            android:id="@+id/nav_schedule"
-            android:title="@string/menu_item_schedule"/>
+        <!--<item-->
+            <!--android:id="@+id/nav_schedule"-->
+            <!--android:title="@string/menu_item_schedule"/>-->
 
     </group>
-    <group
-        android:id="@+id/bottom_menu"
-        android:checkableBehavior="single">
-
-        <item
-            android:id="@+id/nav_contact"
-            android:title="@string/menu_item_contact"/>
-        <item
-            android:id="@+id/nav_about"
-            android:title="@string/menu_item_about"/>
-
-    </group>
+    <!--<group-->
+        <!--android:id="@+id/bottom_menu"-->
+        <!--android:checkableBehavior="single">-->
+<!---->
+        <!--<item-->
+            <!--android:id="@+id/nav_contact"-->
+            <!--android:title="@string/menu_item_contact"/>-->
+        <!--<item-->
+            <!--android:id="@+id/nav_about"-->
+            <!--android:title="@string/menu_item_about"/>-->
+<!---->
+    <!--</group>-->
 </menu>

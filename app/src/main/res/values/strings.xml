@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Maciejówka</string>
 
     <!-- Navigation drawer -->
@@ -12,5 +13,4 @@
     <string name="open_drawer">Open navigation drawer</string>
     <string name="close_drawer">Close navigation drawer</string>
 
-    <string name="test_maciek">test_maciek</string>
 </resources>

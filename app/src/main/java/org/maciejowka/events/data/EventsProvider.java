@@ -34,6 +34,9 @@ public class EventsProvider extends AsyncTask<Void, Void, Result<List<EventModel
     @Override
     protected void onPostExecute(Result<List<EventModel>> result) {
         handleResult(result);
+        if (eventsFragment != null) {
+            eventsFragment.stopRefreshing();
+        }
         super.onPostExecute(result);
     }
 
