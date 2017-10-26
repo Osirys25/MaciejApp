@@ -1,3 +1,109 @@
 * {
     -webkit-user-select: none;
 }
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+a:link {
+    color: #f36523;
+}
+
+a:hover {
+    color: #555555;
+}
+
+a:active {
+    color: #000000;
+    background: #efefef;
+}
+
+.notices-v1 blockquote {
+	background: #dcdcdc;
+	margin: auto;
+	width: 100%;
+}
+
+.notices-v1 .quote {
+	text-align: center;
+	padding: 10px 10px 0 10px; /*top, right, bottom, left*/
+	font-style: italic;
+}
+
+.notices-v1 .siglum {
+	text-align: right;
+	padding: 10px;
+	color: #9d9fa2;
+}
+
+.notices-v1 .info {
+    margin: 10px;
+	color: red;
+	font-family: Marcellus;
+	font-size: 1.2em;
+	font-style: italic;
+}
+
+.notices-v1 .group {
+	display: flex;
+	flex-flow: row wrap;
+}
+
+.notices-v1 .day {
+	margin: 8px 8px 8px 8px;
+	border: 1px solid #dcdcdc;
+	width: 200px;
+	flex-grow: 1;
+}
+.notices-v1 h3 {
+	background: #dcdcdc;
+	padding: 10px 10px 10px 10px;
+	margin: 0px;
+	text-align: center;
+	font-family: Marcellus;
+}
+
+.notices-v1 h1 {
+    font-family: Marcellus;
+	text-align: center;
+	margin-top: 20px;
+}
+
+.notices-v1 .event {
+	padding: 10px;
+	margin: 5px;
+	text-indent: 25px;
+	border-bottom: 1px solid #dcdcdc;
+}
+
+.notices-v1 .notice {
+	padding: 10px;
+	margin: 5px;
+	text-indent: 25px;
+	border-bottom: 1px solid #dcdcdc;
+	background: #dcdcdc;
+}
+
+.notices-v1 .social {
+    margin: 10px 10px 10px 10px;
+}
+
+.notices-v1 .greeting {
+	text-align: center;
+	font-family: Marcellus;
+	font-size: 1.5em;
+	color: #f36523;
+	line-height: 1.7em;
+}
+
+@font-face {
+    font-family: Marcellus;
+    src: url('../fonts/Marcellus/Marcellus-Regular.ttf');
+}
+
+@font-face {
+    font-family: Cinzel;
+    src: url('../fonts/Cinzel/Cinzel-Regular.ttf');
+}
