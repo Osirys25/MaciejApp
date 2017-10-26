@@ -18,7 +18,7 @@ import static org.maciejowka.notices.LoadingStatus.RESTORED;
 
 class NoticesLoader extends AsyncTask<LoadingStatus, Void, LoadingStatus> {
 
-    private static final String NOTICES_JSON_URL = "http://www.maciejowka.org/klepson/get_category_posts/?slug=ogloszenia-duszpasterskie";
+    private static final String NOTICES_JSON_URL = "http://www.maciejowka.org/klepson/get_category_posts/?slug=ogloszenia";
     private static final String SHARED_PREFERENCES_NAME="notices";
 
     private NoticesFragment noticesFragment;
