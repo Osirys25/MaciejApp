@@ -19,9 +19,9 @@ import org.maciejowka.notices.NoticesFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle actionBarDrawerToggle;
-    private NavigationView navigationView;
+//    private DrawerLayout drawerLayout;
+//    private ActionBarDrawerToggle actionBarDrawerToggle;
+//    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,41 +31,42 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
 
-        setNavigationView();
+//        setNavigationView();
 
-        drawerLayout = findViewById(R.id.drawer_layout);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer);
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+//        drawerLayout = findViewById(R.id.drawer_layout);
+//        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer);
+//        drawerLayout.addDrawerListener(actionBarDrawerToggle);
 
         if (savedInstanceState == null) {
-            MenuItem item = navigationView.getMenu().getItem(0);
-            setFragment(EventsFragment.class);
-            item.setChecked(true);
-            setTitle(item.getTitle());
+//            MenuItem item = navigationView.getMenu().getItem(0);
+//            setFragment(EventsFragment.class);
+//            item.setChecked(true);
+//            setTitle(item.getTitle());
+            setFragment(NoticesFragment.class);
         } else {
             setTitle(savedInstanceState.getString("title"));
         }
     }
 
-    private void setNavigationView() {
-        navigationView = findViewById(R.id.navigation_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                selectDrawerItem(item);
-                item.setChecked(true);
-                setTitle(item.getTitle());
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        drawerLayout.closeDrawers();
-                    }
-                }, 0);
-                return true;
-            }
-        });
-    }
+//    private void setNavigationView() {
+//        navigationView = findViewById(R.id.navigation_view);
+//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//                selectDrawerItem(item);
+//                item.setChecked(true);
+//                setTitle(item.getTitle());
+//
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        drawerLayout.closeDrawers();
+//                    }
+//                }, 0);
+//                return true;
+//            }
+//        });
+//    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -73,14 +74,14 @@ public class MainActivity extends AppCompatActivity {
         outState.putString("title", getTitle().toString());
     }
 
-    private void selectDrawerItem(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.nav_events:
-                setFragment(EventsFragment.class);
-                break;
-            case R.id.nav_notices:
-                setFragment(NoticesFragment.class);
-                break;
+//    private void selectDrawerItem(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.nav_events:
+//                setFragment(EventsFragment.class);
+//                break;
+//            case R.id.nav_notices:
+//                setFragment(NoticesFragment.class);
+//                break;
 //            case R.id.nav_schedule:
 //                setFragment(ScheduleFragment.class);
 //                break;
@@ -90,8 +91,8 @@ public class MainActivity extends AppCompatActivity {
 //            case R.id.nav_about:
 //                setFragment(EventsFragment.class);
 //                break;
-        }
-    }
+//        }
+//    }
 
     private void setFragment(Class fragmentClass) {
         try {
@@ -106,22 +107,22 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onPostCreate(Bundle savedInstance) {
-        super.onPostCreate(savedInstance);
-        actionBarDrawerToggle.syncState();
-    }
+//    @Override
+//    public void onPostCreate(Bundle savedInstance) {
+//        super.onPostCreate(savedInstance);
+//        actionBarDrawerToggle.syncState();
+//    }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        actionBarDrawerToggle.onConfigurationChanged(newConfig);
-    }
+//    @Override
+//    public void onConfigurationChanged(Configuration newConfig) {
+//        super.onConfigurationChanged(newConfig);
+//        actionBarDrawerToggle.onConfigurationChanged(newConfig);
+//    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (actionBarDrawerToggle.onOptionsItemSelected(item))
-            return true;
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        if (actionBarDrawerToggle.onOptionsItemSelected(item))
+//            return true;
+//        return super.onOptionsItemSelected(item);
+//    }
 }
